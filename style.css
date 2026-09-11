@@ -2972,12 +2972,13 @@ body.light-mode .testimonial-card {
 .leetcode-widget::before {
     content: '// COMPETITIVE_CODING';
     position: absolute;
-    top: 10px;
+    bottom: 14px;
     right: 20px;
     font-family: var(--font-mono);
     font-size: 0.65rem;
-    color: rgba(255, 161, 22, 0.35);
+    color: rgba(255, 161, 22, 0.25);
     letter-spacing: 1px;
+    pointer-events: none;
 }
 
 .leetcode-header {
@@ -2988,20 +2989,35 @@ body.light-mode .testimonial-card {
     font-weight: 700;
     font-size: 1.05rem;
     color: var(--text-primary);
+    /* give enough padding-right so the ::before comment doesn't overlap */
+    padding-right: 160px;
+    position: relative;
+    flex-wrap: wrap;
 }
 
 .lc-profile-link {
     margin-left: auto;
     font-family: var(--font-mono);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 700;
     color: #ffa116;
     text-decoration: none;
     transition: var(--transition-fast);
+    background: rgba(255,161,22,0.08);
+    border: 1px solid rgba(255,161,22,0.2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .lc-profile-link:hover {
+    background: rgba(255,161,22,0.16);
+    border-color: rgba(255,161,22,0.5);
     text-shadow: 0 0 8px rgba(255,161,22,0.5);
+    transform: translateY(-1px);
 }
+
 
 .leetcode-stats-grid {
     display: grid;

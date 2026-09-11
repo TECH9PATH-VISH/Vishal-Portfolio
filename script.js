@@ -1046,22 +1046,54 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fetchLeetCodeStats() {
-        // Using a CORS-friendly unofficial API
-        fetch('https://leetcode-stats-api.herokuapp.com/XBORUTO', {
-            signal: AbortSignal.timeout(6000)
+        const USERNAME = 'XBORUTO';
+
+        // Helper: apply stats from a normalised {easy, medium, hard, total} object
+        function applyStats({ easy, medium, hard, total }) {
+            setLcStat(lcEasy,   easy);
+            setLcStat(lcMedium, medium);
+            setLcStat(lcHard,   hard);
+            if (lcTotal) lcTotal.textContent = total;
+        }
+
+        // API 1 — alfa-leetcode-api (most reliable, active project)
+        fetch(`https://alfa-leetcode-api.onrender.com/${USERNAME}/solved`, {
+            signal: AbortSignal.timeout(7000)
         })
-        .then(r => r.json())
+        .then(r => { if (!r.ok) throw new Error('API1 failed'); return r.json(); })
         .then(data => {
-            if (data && data.status === 'success') {
-                setLcStat(lcEasy,   data.easySolved   ?? data.easy   ?? '?');
-                setLcStat(lcMedium, data.mediumSolved ?? data.medium ?? '?');
-                setLcStat(lcHard,   data.hardSolved   ?? data.hard   ?? '?');
-                if (lcTotal) lcTotal.textContent = data.totalSolved ?? '?';
+            // Response shape: { solvedProblem, easySolved, mediumSolved, hardSolved }
+            if (data && (data.easySolved !== undefined || data.solvedProblem !== undefined)) {
+                applyStats({
+                    easy:   data.easySolved   ?? '?',
+                    medium: data.mediumSolved ?? '?',
+                    hard:   data.hardSolved   ?? '?',
+                    total:  data.solvedProblem ?? '?'
+                });
             } else {
-                setLcFallback();
+                throw new Error('API1 bad data');
             }
         })
-        .catch(() => setLcFallback());
+        .catch(() => {
+            // API 2 — leetcode-stats-api (backup)
+            fetch(`https://leetcode-stats-api.herokuapp.com/${USERNAME}`, {
+                signal: AbortSignal.timeout(7000)
+            })
+            .then(r => { if (!r.ok) throw new Error('API2 failed'); return r.json(); })
+            .then(data => {
+                if (data && data.status === 'success') {
+                    applyStats({
+                        easy:   data.easySolved   ?? data.easy   ?? '?',
+                        medium: data.mediumSolved ?? data.medium ?? '?',
+                        hard:   data.hardSolved   ?? data.hard   ?? '?',
+                        total:  data.totalSolved  ?? '?'
+                    });
+                } else {
+                    throw new Error('API2 bad data');
+                }
+            })
+            .catch(() => setLcFallback());
+        });
     }
 
     function setLcStat(el, val) {
@@ -1069,12 +1101,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setLcFallback() {
-        // Show dashes — user can update manually if username doesn't match API
+        // Both APIs failed — show clean dashes and a hint to check manually
         if (lcEasy)   lcEasy.textContent   = '—';
         if (lcMedium) lcMedium.textContent = '—';
         if (lcHard)   lcHard.textContent   = '—';
-        if (lcTotal)  lcTotal.textContent  = '— (update username)';
+        if (lcTotal)  lcTotal.textContent  = '—';
+        // Make visit button more prominent when stats can't load
+        const visitBtn = document.getElementById('lc-visit-btn');
+        if (visitBtn) {
+            visitBtn.style.background = 'rgba(255,161,22,0.18)';
+            visitBtn.title = 'Stats could not load — click to verify directly';
+        }
     }
+
 
     // ============================================================
     // FEATURE 7 — WIP PROGRESS BAR ANIMATION
