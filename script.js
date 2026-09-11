@@ -900,4 +900,280 @@ document.addEventListener('DOMContentLoaded', () => {
         updateParallax();
     }
 
+    // ============================================================
+    // FEATURE 10 — BOOT SEQUENCE
+    // ============================================================
+    const bootOverlay = document.getElementById('boot-overlay');
+    const bootBar     = document.getElementById('boot-bar');
+    const bootPercent = document.getElementById('boot-percent');
+    const bootLines   = document.getElementById('boot-lines');
+
+    const bootMessages = [
+        'Loading kernel modules... ',
+        'Mounting filesystems... ',
+        'Starting UI renderer... ',
+        'Injecting glassmorphic shaders... ',
+        'Calibrating neural nodes... ',
+        'Handshake with server... ',
+        'Portfolio v2.0 ready. '
+    ];
+
+    if (bootOverlay && bootBar && bootPercent && bootLines) {
+        // Prevent flash of main content during boot
+        document.body.style.overflow = 'hidden';
+
+        let progress = 0;
+        let msgIdx   = 0;
+        const totalDuration = 2400; // ms
+        const interval = totalDuration / 100;
+
+        const addBootLine = (msg, ok = true) => {
+            const line = document.createElement('div');
+            line.className = 'boot-line-item';
+            line.innerHTML = `<span>${msg}</span><span class="ok">${ok ? '[ OK ]' : '[ .. ]'}</span>`;
+            bootLines.appendChild(line);
+        };
+
+        const bootInterval = setInterval(() => {
+            progress += 1;
+            bootBar.style.width = progress + '%';
+            bootPercent.textContent = progress + '%';
+
+            // Add a boot line at certain progress milestones
+            const msgThreshold = Math.floor((msgIdx + 1) * (100 / bootMessages.length));
+            if (progress >= msgThreshold && msgIdx < bootMessages.length) {
+                addBootLine(bootMessages[msgIdx], progress < 100);
+                msgIdx++;
+            }
+
+            if (progress >= 100) {
+                clearInterval(bootInterval);
+                setTimeout(() => {
+                    bootOverlay.classList.add('hide');
+                    document.body.style.overflow = '';
+                    // Trigger stat counter after boot
+                    setTimeout(runStatCounters, 600);
+                }, 300);
+            }
+        }, interval);
+    } else {
+        // If boot overlay missing, run counters immediately
+        setTimeout(runStatCounters, 800);
+    }
+
+    // ============================================================
+    // FEATURE 11 — LIGHT / DARK MODE TOGGLE
+    // ============================================================
+    const themeToggle = document.getElementById('theme-toggle');
+    let isLightMode = localStorage.getItem('theme-mode') === 'light';
+
+    const applyTheme = () => {
+        if (isLightMode) {
+            document.body.classList.add('light-mode');
+        } else {
+            document.body.classList.remove('light-mode');
+        }
+    };
+
+    applyTheme(); // Apply saved preference on load
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            isLightMode = !isLightMode;
+            localStorage.setItem('theme-mode', isLightMode ? 'light' : 'dark');
+            applyTheme();
+            playClickSound();
+        });
+    }
+
+    // ============================================================
+    // FEATURE 4 — HERO STATS COUNTER ANIMATION
+    // ============================================================
+    function animateCounter(el, target, duration = 1200) {
+        const start = performance.now();
+        const update = (now) => {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out cubic
+            const ease = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(ease * target);
+            if (progress < 1) requestAnimationFrame(update);
+            else el.textContent = target;
+        };
+        requestAnimationFrame(update);
+    }
+
+    function runStatCounters() {
+        const statNums = document.querySelectorAll('.stat-number');
+        statNums.forEach(el => {
+            const target = parseInt(el.getAttribute('data-target'), 10);
+            if (!isNaN(target)) animateCounter(el, target);
+        });
+    }
+
+    // Also run when hero scrolls into view (in case boot overlay is removed)
+    const heroStatsEl = document.getElementById('hero-stats');
+    if (heroStatsEl) {
+        const statsObserver = new IntersectionObserver((entries, obs) => {
+            if (entries[0].isIntersecting) {
+                runStatCounters();
+                obs.disconnect();
+            }
+        }, { threshold: 0.5 });
+        statsObserver.observe(heroStatsEl);
+    }
+
+    // ============================================================
+    // FEATURE 6 — LEETCODE STATS WIDGET
+    // ============================================================
+    const lcWidget = document.getElementById('leetcode-widget');
+    const lcEasy   = document.getElementById('lc-easy');
+    const lcMedium = document.getElementById('lc-medium');
+    const lcHard   = document.getElementById('lc-hard');
+    const lcTotal  = document.getElementById('lc-total');
+
+    // Show widget when it comes into view
+    if (lcWidget) {
+        const lcObserver = new IntersectionObserver((entries, obs) => {
+            if (entries[0].isIntersecting) {
+                lcWidget.classList.add('show');
+                obs.disconnect();
+                // Fetch LeetCode stats
+                fetchLeetCodeStats();
+            }
+        }, { threshold: 0.2 });
+        lcObserver.observe(lcWidget);
+    }
+
+    function fetchLeetCodeStats() {
+        // Using a CORS-friendly unofficial API
+        fetch('https://leetcode-stats-api.herokuapp.com/TECH9PATH-VISH', {
+            signal: AbortSignal.timeout(6000)
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.status === 'success') {
+                setLcStat(lcEasy,   data.easySolved   ?? data.easy   ?? '?');
+                setLcStat(lcMedium, data.mediumSolved ?? data.medium ?? '?');
+                setLcStat(lcHard,   data.hardSolved   ?? data.hard   ?? '?');
+                if (lcTotal) lcTotal.textContent = data.totalSolved ?? '?';
+            } else {
+                setLcFallback();
+            }
+        })
+        .catch(() => setLcFallback());
+    }
+
+    function setLcStat(el, val) {
+        if (el) el.textContent = val;
+    }
+
+    function setLcFallback() {
+        // Show dashes — user can update manually if username doesn't match API
+        if (lcEasy)   lcEasy.textContent   = '—';
+        if (lcMedium) lcMedium.textContent = '—';
+        if (lcHard)   lcHard.textContent   = '—';
+        if (lcTotal)  lcTotal.textContent  = '— (update username)';
+    }
+
+    // ============================================================
+    // FEATURE 7 — WIP PROGRESS BAR ANIMATION
+    // ============================================================
+    const wipFill = document.getElementById('wip-fill');
+    const wipPct  = document.getElementById('wip-pct');
+
+    if (wipFill) {
+        const wipObserver = new IntersectionObserver((entries, obs) => {
+            if (entries[0].isIntersecting) {
+                const target = parseInt(wipFill.getAttribute('data-target'), 10) || 35;
+                obs.disconnect();
+                setTimeout(() => {
+                    wipFill.style.width = target + '%';
+                    if (wipPct) wipPct.textContent = target + '%';
+                }, 300);
+            }
+        }, { threshold: 0.3 });
+        wipObserver.observe(wipFill);
+    }
+
+    // ============================================================
+    // FEATURE 13 — SECTION PARTICLE BURST ON REVEAL
+    // ============================================================
+    const colors = ['#00f0ff', '#00ff87', '#00ffcc', '#ffffff'];
+
+    function burstParticles(section) {
+        const titleEl = section.querySelector('.section-title');
+        if (!titleEl) return;
+
+        // Add relative positioning to section title if needed
+        const titlePos = titleEl.style.position;
+        titleEl.style.position = 'relative';
+
+        const container = document.createElement('div');
+        container.className = 'particle-burst';
+        titleEl.appendChild(container);
+
+        const count = 18;
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+
+            const angle   = (Math.random() * 360) * (Math.PI / 180);
+            const dist    = 30 + Math.random() * 80;
+            const tx      = Math.cos(angle) * dist;
+            const ty      = Math.sin(angle) * dist - 20;
+            const dur     = 0.5 + Math.random() * 0.5;
+            const color   = colors[Math.floor(Math.random() * colors.length)];
+            const startX  = Math.random() * 100;
+
+            p.style.setProperty('--tx0', '0px');
+            p.style.setProperty('--ty0', '0px');
+            p.style.setProperty('--txf', tx + 'px');
+            p.style.setProperty('--tyf', ty + 'px');
+            p.style.setProperty('--dur', dur + 's');
+            p.style.left = startX + '%';
+            p.style.background = color;
+            p.style.boxShadow  = `0 0 6px ${color}`;
+            p.style.animationDelay = (Math.random() * 0.15) + 's';
+            p.style.width  = (2 + Math.random() * 3) + 'px';
+            p.style.height = p.style.width;
+
+            container.appendChild(p);
+
+            // Remove particles after animation
+            setTimeout(() => {
+                if (container.parentNode) container.remove();
+                titleEl.style.position = titlePos;
+            }, (dur + 0.2) * 1000 + 150);
+        }
+    }
+
+    // Patch into existing IntersectionObserver reveal logic
+    // We do this by adding a MutationObserver that watches for .show being added
+    const sectionEls = document.querySelectorAll('section.hidden');
+    const particleObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.classList.contains('show')) {
+                burstParticles(entry.target);
+                particleObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    // Use MutationObserver to detect when .show is added to sections
+    const showObserver = new MutationObserver((mutations) => {
+        mutations.forEach(m => {
+            if (m.type === 'attributes' && m.attributeName === 'class') {
+                const el = m.target;
+                if (el.classList.contains('show') && el.tagName === 'SECTION') {
+                    burstParticles(el);
+                }
+            }
+        });
+    });
+
+    document.querySelectorAll('section').forEach(sec => {
+        showObserver.observe(sec, { attributes: true });
+    });
+
 });
