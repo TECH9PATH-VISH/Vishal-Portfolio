@@ -2979,15 +2979,7 @@ body.light-mode .testimonial-card {
     color: var(--text-primary);
 }
 
-/* Right-side group: comment label + profile badge */
-.lc-header-right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
+/* Ghost comment label next to username */
 .lc-code-comment {
     font-family: var(--font-mono);
     font-size: 0.7rem;
@@ -2998,7 +2990,6 @@ body.light-mode .testimonial-card {
 }
 
 .lc-profile-link {
-    margin-left: auto;
     font-family: var(--font-mono);
     font-size: 0.85rem;
     font-weight: 700;
@@ -3019,6 +3010,10 @@ body.light-mode .testimonial-card {
     text-shadow: 0 0 8px rgba(255,161,22,0.5);
     transform: translateY(-1px);
 }
+
+/* Remove any ghost pseudo-elements on the widget */
+.leetcode-widget::before,
+.leetcode-widget::after { content: none; display: none; }
 
 
 .leetcode-stats-grid {
