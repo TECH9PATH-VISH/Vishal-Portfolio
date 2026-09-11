@@ -1047,7 +1047,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fetchLeetCodeStats() {
         // Using a CORS-friendly unofficial API
-        fetch('https://leetcode-stats-api.herokuapp.com/TECH9PATH-VISH', {
+        fetch('https://leetcode-stats-api.herokuapp.com/XBORUTO', {
             signal: AbortSignal.timeout(6000)
         })
         .then(r => r.json())

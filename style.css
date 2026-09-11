@@ -3064,6 +3064,14 @@ body.light-mode .testimonial-card {
     border: 1px solid var(--glass-border);
     border-radius: 10px;
     font-size: 0.9rem;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.lc-total-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
 .lc-total-label {
@@ -3081,6 +3089,38 @@ body.light-mode .testimonial-card {
     background-clip: text;
 }
 
+/* Verify / Visit Profile button */
+.lc-visit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    background: rgba(255, 161, 22, 0.1);
+    border: 1px solid rgba(255, 161, 22, 0.35);
+    border-radius: 8px;
+    color: #ffa116;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.lc-visit-btn:hover {
+    background: rgba(255, 161, 22, 0.2);
+    border-color: rgba(255, 161, 22, 0.7);
+    box-shadow: 0 0 14px rgba(255, 161, 22, 0.25), 0 4px 16px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+    color: #ffb733;
+}
+
+.lc-visit-btn svg {
+    flex-shrink: 0;
+}
+
 /* LeetCode loading spinner */
 .lc-spinner {
     display: inline-block;
@@ -3095,6 +3135,7 @@ body.light-mode .testimonial-card {
 @keyframes lc-spin {
     to { transform: rotate(360deg); }
 }
+
 
 /* ========================================================
    FEATURE 7 — CURRENTLY WORKING ON (WIP)
