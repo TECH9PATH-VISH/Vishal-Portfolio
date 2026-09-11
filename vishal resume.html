@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vishal Kumar Singh - Resume</title>
+    <style>
+        :root {
+            --primary: #2d3748;
+            --accent: #3182ce;
+            --text: #4a5568;
+            --light-bg: #f7fafc;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .page {
+            background: white;
+            width: 210mm;
+            min-height: 297mm; /* A4 Size */
+            padding: 20mm;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .contact-info {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: var(--text);
+            flex-wrap: wrap;
+        }
+        .contact-info a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        section {
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: var(--primary);
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #cbd5e0;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+        }
+        .item {
+            margin-bottom: 12px;
+        }
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 3px;
+        }
+        .item-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 15px;
+        }
+        .item-subtitle {
+            font-style: italic;
+            font-size: 14px;
+        }
+        .item-date {
+            font-size: 13px;
+            color: #718096;
+        }
+        p, ul {
+            font-size: 13.5px;
+        }
+        ul {
+            padding-left: 18px;
+            margin-top: 5px;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 13.5px;
+        }
+        
+        /* Print Settings to ensure perfect PDF export */
+        @media print {
+            body { background: white; padding: 0; }
+            .page { box-shadow: none; width: 100%; min-height: auto; padding: 15mm; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header>
+            <h1>Vishal Kumar Singh</h1>
+            <div class="contact-info">
+                <span>Patna, Bihar</span>
+                <span>•</span>
+                <span>8271665209</span>
+                <span>•</span>
+                <span>cocavenger3000@gmail.com</span>
+                <span>•</span>
+                <a href="https://tech9path-vish.github.io/Vishal-Portfolio/" target="_blank">Portfolio: tech9path-vish.github.io</a>
+            </div>
+        </header>
+
+        <section>
+            <h2>Summary</h2>
+            <p>Cyber Security Enthusiast and Full-Stack Developer engineering secure digital environments. Bridging deep-tech academic research with real-world software by building AI-integrated backends, advanced cryptographic ledgers, and secure applications. Strong foundation in Data Structures and Algorithms (DSA) with active development experience in mobile and web environments.</p>
+        </section>
+
+        <section>
+            <h2>Education</h2>
+            <div class="item">
+                <div class="item-header">
+                    <span class="item-title">Indian Institute of Technology (IIT), Patna</span>
+                </div>
+                <div class="item-header">
+                    <span class="item-subtitle">B.S. in Artificial Intelligence & Cyber Security (Roll No: UA2504AIH425)</span>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-header">
+                    <span class="item-title">Bakhtiyarpur College of Engineering (BCE), Patna</span>
+                </div>
+                <div class="item-header">
+                    <span class="item-subtitle">Bachelor of Technology (B.Tech)</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div><strong>Languages:</strong> Java, Python, C, Dart, HTML</div>
+                <div><strong>Frameworks:</strong> Flutter, FastAPI</div>
+                <div><strong>Core Competencies:</strong> DSA, Cyber Security, AI Integrations, OOPS</div>
+                <div><strong>Tools & Concepts:</strong> Git/GitHub, Linux</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Projects</h2>
+            <div class="item">
+                <div class="item-header">
+                    <span class="item-title">TruthChain (Hackathon Project)</span>
+                    <span class="item-date">March 2026 - April 2026</span>
+                </div>
+                <span class="item-subtitle">AI & Cryptography Backend</span>
+                <ul>
+                    <li>Architected and developed a full-stack web application for an internal college hackathon, pivoting from earlier TruthChain prototypes.</li>
+                    <li>Engineered simulated cryptographic chains to ensure data immutability and ledger integrity.</li>
+                    <li>Integrated AI capabilities to analyze and process backend data, enhancing overall system intelligence and security.</li>
+                </ul>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <span class="item-title">Personal Portfolio Architecture</span>
+                    <span class="item-date">2026</span>
+                </div>
+                <span class="item-subtitle">Frontend UI/UX Engineering</span>
+                <ul>
+                    <li>Designed and deployed a highly performant, custom-built portfolio emphasizing an advanced "Cyber-Security" aesthetic.</li>
+                    <li>Implemented complex vanilla JavaScript and CSS features including Ambient Parallax physics, scroll velocity momentum, and custom DOM manipulations without relying on heavy external libraries.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Extracurricular & Leadership</h2>
+            <div class="item">
+                <div class="item-header">
+                    <span class="item-title">ByteHack Hackathon</span>
+                    <span class="item-date">2026</span>
+                </div>
+                <span class="item-subtitle">Team Leader & First Place Winner</span>
+                <ul>
+                    <li>Led a team of developers to secure first place in the ByteHack hackathon organized by bytes.io.</li>
+                    <li>Directed project architecture and coordinated team execution under strict time constraints to deliver a winning technical solution.</li>
+                </ul>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <span class="item-title">Kaushal Manthan 2026 Sports Fest</span>
+                    <span class="item-date">January 2026</span>
+                </div>
+                <span class="item-subtitle">Event Volunteer</span>
+                <ul>
+                    <li>Facilitated logistics and event coordination for Bakhtiyarpur College of Engineering’s major campus sports festival.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

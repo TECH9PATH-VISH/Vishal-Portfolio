@@ -18,6 +18,180 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     requestAnimationFrame(raf);
 
+    // Sound Effects Manager (synthesized via Web Audio API)
+    let audioCtx = null;
+    let soundEnabled = localStorage.getItem('sound-enabled') === 'true'; // default to false (muted)
+    
+    const soundToggleBtn = document.getElementById('sound-toggle');
+    
+    // Update button UI state initially
+    if (soundToggleBtn) {
+        if (soundEnabled) {
+            soundToggleBtn.classList.remove('muted');
+        } else {
+            soundToggleBtn.classList.add('muted');
+        }
+    }
+
+    const initAudioContext = () => {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+    };
+
+    const playClickSound = () => {
+        if (!soundEnabled) return;
+        try {
+            initAudioContext();
+            const now = audioCtx.currentTime;
+
+            // Dual tone digital beep
+            // Tone 1: Pitch slide up
+            const osc1 = audioCtx.createOscillator();
+            const gain1 = audioCtx.createGain();
+            
+            osc1.type = 'triangle';
+            osc1.frequency.setValueAtTime(450, now);
+            osc1.frequency.exponentialRampToValueAtTime(1050, now + 0.08);
+
+            gain1.gain.setValueAtTime(0.12, now);
+            gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+            osc1.connect(gain1);
+            gain1.connect(audioCtx.destination);
+
+            osc1.start(now);
+            osc1.stop(now + 0.08);
+
+            // Tone 2: Extra cyber snap/click transient
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(1200, now);
+            osc2.frequency.setValueAtTime(800, now + 0.01);
+
+            gain2.gain.setValueAtTime(0.08, now);
+            gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.015);
+
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+
+            osc2.start(now);
+            osc2.stop(now + 0.015);
+        } catch (e) {
+            console.warn('Audio click playback failed:', e);
+        }
+    };
+
+    const playTypeSound = () => {
+        if (!soundEnabled) return;
+        try {
+            initAudioContext();
+            const now = audioCtx.currentTime;
+            
+            // Simulates a tiny mechanical keyclick using bandpass filtered white noise
+            const bufferSize = audioCtx.sampleRate * 0.012; // 12ms duration
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = Math.random() * 2 - 1;
+            }
+
+            const noiseNode = audioCtx.createBufferSource();
+            noiseNode.buffer = buffer;
+
+            // Bandpass filter to isolate mechanical mid-high frequencies (around 1600Hz)
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 1600 + Math.random() * 400 - 200; // adding slight jitter for realism
+            filter.Q.value = 5.0;
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+
+            noiseNode.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            noiseNode.start(now);
+            noiseNode.stop(now + 0.012);
+        } catch (e) {
+            console.warn('Audio typing playback failed:', e);
+        }
+    };
+
+    const playSuccessSound = () => {
+        if (!soundEnabled) return;
+        try {
+            initAudioContext();
+            const now = audioCtx.currentTime;
+            
+            // Play a rising electronic arpeggio (chime)
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 (Major chord)
+            notes.forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                
+                const noteTime = now + (idx * 0.09);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.setValueAtTime(0, noteTime);
+                gain.gain.linearRampToValueAtTime(0.08, noteTime + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.35);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.start(noteTime);
+                osc.stop(noteTime + 0.35);
+            });
+        } catch (e) {
+            console.warn('Audio success playback failed:', e);
+        }
+    };
+
+    // Toggle button handler
+    if (soundToggleBtn) {
+        soundToggleBtn.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            localStorage.setItem('sound-enabled', soundEnabled);
+            
+            if (soundEnabled) {
+                soundToggleBtn.classList.remove('muted');
+                initAudioContext();
+                playClickSound();
+            } else {
+                soundToggleBtn.classList.add('muted');
+            }
+        });
+    }
+
+    // Global Click Listener for elements acting like buttons
+    document.addEventListener('click', (e) => {
+        const interactive = e.target.closest('a, button, .project-card, .achievement-card, .social-link, #greeting-trigger');
+        if (interactive) {
+            if (interactive.id === 'sound-toggle') return; // Click sound handled in its own click listener
+            playClickSound();
+        }
+    });
+
+    // Form inputs typing sound
+    const contactFormInputs = document.querySelectorAll('#contact-form input, #contact-form textarea');
+    contactFormInputs.forEach(input => {
+        input.addEventListener('keydown', (e) => {
+            if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete') {
+                playTypeSound();
+            }
+        });
+    });
+
     // 1. Mobile Menu Toggle
     const hamburger = document.getElementById('hamburger-toggle');
     const navLinks = document.getElementById('nav-links');
@@ -204,6 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 logLine3.textContent = 'Transmission complete. Status code: 202 (ACCEPTED)';
                 submitBtn.textContent = 'SECURELY SENT!';
+                playSuccessSound();
             })
             .catch(error => {
                 logLine3.textContent = 'Transmission failed. Routing error: 503 (UNAVAILABLE)';
@@ -547,6 +722,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Prevent keylogger recording when user is typing in form input/textarea
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
             return;
+        }
+
+        // Play typing sound for the easter egg keypresses
+        if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Delete') {
+            playTypeSound();
         }
 
         typedBuffer += e.key.toLowerCase();

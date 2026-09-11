@@ -46,11 +46,26 @@
                 </ul>
             </nav>
 
-            <button class="hamburger" id="hamburger-toggle" aria-label="Toggle menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="nav-actions">
+                <button class="sound-toggle muted" id="sound-toggle" aria-label="Toggle sound effects">
+                    <svg class="sound-icon sound-on" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <svg class="sound-icon sound-off" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                </button>
+
+                <button class="hamburger" id="hamburger-toggle" aria-label="Toggle menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -65,7 +80,7 @@
                     <span class="typing-cursor"></span>
                 </div>
                 <div class="hero-ctas">
-                    <a href="#projects" class="btn btn-primary">View Projects</a>
+                    <a href="resume.pdf" download class="btn btn-primary">Download Resume</a>
                     <a href="#contact" class="btn btn-secondary">Contact Me</a>
                 </div>
             </div>
@@ -550,7 +565,7 @@
                     <span>C:\ROOT&gt; </span><span class="terminal-cursor">_</span>
                 </div>
                 <div class="terminal-actions">
-                    <a href="resume.pdf" download class="btn btn-primary" id="download-classified-btn">Download Classified File</a>
+                    <a href="resume.pdf" download class="btn btn-primary" id="download-classified-btn">Download Resume</a>
                     <button class="btn btn-secondary" id="terminal-close-bottom">Close Terminal</button>
                 </div>
             </div>
