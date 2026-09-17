@@ -973,12 +973,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isLightMode) {
             document.body.classList.add('light-mode');
             if (ghImg) {
-                ghImg.src = "https://github-readme-activity-graph.vercel.app/graph?username=TECH9PATH-VISH&bg_color=00000000&color=0ea5e9&line=4f46e5&point=0ea5e9&area=true&hide_border=true";
+                ghImg.src = "https://ghchart.rshah.org/0ea5e9/TECH9PATH-VISH";
             }
         } else {
             document.body.classList.remove('light-mode');
             if (ghImg) {
-                ghImg.src = "https://github-readme-activity-graph.vercel.app/graph?username=TECH9PATH-VISH&bg_color=00000000&color=00f0ff&line=00f0ff&point=00f0ff&area=true&hide_border=true";
+                ghImg.src = "https://ghchart.rshah.org/00f0ff/TECH9PATH-VISH";
             }
         }
     };
