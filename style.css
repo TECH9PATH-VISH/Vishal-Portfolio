@@ -2732,47 +2732,51 @@ body.light-mode .theme-icon.moon-icon { opacity: 0; transform: rotate(90deg) sca
 
 /* Light Mode CSS Variable Overrides */
 body.light-mode {
-    --bg-base: #f0f4f8;
-    --bg-surface: #ffffff;
-    --bg-surface-elevated: #e8eef5;
-    --text-primary: #0f172a;
-    --text-secondary: #334155;
-    --text-muted: #94a3b8;
-    --glass-bg: rgba(255,255,255,0.75);
-    --glass-bg-hover: rgba(255,255,255,0.9);
-    --glass-border: rgba(0,0,0,0.08);
-    --glass-border-focus: rgba(0, 150, 200, 0.4);
-    --accent-cyan: #0077aa;
-    --accent-cyan-rgb: 0, 119, 170;
-    --lidar-cyan: #00996a;
-    --lidar-cyan-rgb: 0, 153, 106;
-    --accent-green: #007a4a;
-    --accent-green-rgb: 0, 122, 74;
-    background-color: var(--bg-base);
+    --bg-base: #e0c3fc; /* Lilac base for fallback */
+    --bg-surface: rgba(255, 255, 255, 0.55);
+    --bg-surface-elevated: rgba(255, 255, 255, 0.7);
+    --text-primary: #1e1b4b;
+    --text-secondary: #312e81;
+    --text-muted: #4f46e5;
+    --glass-bg: rgba(255, 255, 255, 0.5);
+    --glass-bg-hover: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --glass-border-focus: rgba(99, 102, 241, 0.8);
+    --accent-cyan: #4f46e5; /* Indigo */
+    --accent-cyan-rgb: 79, 70, 229;
+    --lidar-cyan: #3b82f6; /* Bright blue */
+    --lidar-cyan-rgb: 59, 130, 246;
+    --accent-green: #0ea5e9; /* Sky blue */
+    --accent-green-rgb: 14, 165, 233;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
     color: var(--text-primary);
 }
 
 body.light-mode .aurora-bg {
-    background: radial-gradient(circle at 50% 50%, #dce8f0 0%, #c8dce8 100%);
+    background: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.15) 0%, transparent 40%);
 }
 
 body.light-mode .blob-top {
-    background: radial-gradient(circle, rgba(0,150,255,0.25) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(79, 70, 229, 0.12) 0%, transparent 70%);
 }
 
 body.light-mode .blob-bottom {
-    background: radial-gradient(circle, rgba(0,150,130,0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, transparent 70%);
 }
 
 body.light-mode body::before {
     background-image:
-        linear-gradient(rgba(0,100,180,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,100,180,0.06) 1px, transparent 1px);
+        linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
 }
 
 body.light-mode .skill-badge,
 body.light-mode .tag {
-    background: #e8f0f8;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(99,102,241,0.15);
+    color: #4f46e5;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
 
 body.light-mode .about-bio,
@@ -2780,13 +2784,17 @@ body.light-mode .project-card,
 body.light-mode .achievement-card,
 body.light-mode .timeline-content,
 body.light-mode .skills-category-card {
-    background: rgba(255,255,255,0.85);
-    border-color: rgba(0,0,0,0.08);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 body.light-mode .hero-subtitle {
-    background: rgba(255,255,255,0.6);
-    border-color: rgba(0,100,180,0.15);
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: 0 4px 15px rgba(31, 38, 135, 0.05);
 }
 
 body.light-mode .contact-container,
@@ -2794,8 +2802,11 @@ body.light-mode .wip-card,
 body.light-mode .leetcode-widget,
 body.light-mode .github-graph-wrapper,
 body.light-mode .testimonial-card {
-    background: rgba(255,255,255,0.85);
-    border-color: rgba(0,0,0,0.08);
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 /* ========================================================

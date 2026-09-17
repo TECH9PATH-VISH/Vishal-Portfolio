@@ -968,10 +968,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let isLightMode = localStorage.getItem('theme-mode') === 'light';
 
     const applyTheme = () => {
+        const ghImg = document.querySelector('.github-graph-img');
+        
         if (isLightMode) {
             document.body.classList.add('light-mode');
+            if (ghImg) {
+                ghImg.src = "https://github-readme-activity-graph.vercel.app/graph?username=TECH9PATH-VISH&bg_color=00000000&color=0ea5e9&line=4f46e5&point=0ea5e9&area=true&hide_border=true";
+            }
         } else {
             document.body.classList.remove('light-mode');
+            if (ghImg) {
+                ghImg.src = "https://github-readme-activity-graph.vercel.app/graph?username=TECH9PATH-VISH&bg_color=00000000&color=00f0ff&line=00f0ff&point=00f0ff&area=true&hide_border=true";
+            }
         }
     };
 
@@ -982,7 +990,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isLightMode = !isLightMode;
             localStorage.setItem('theme-mode', isLightMode ? 'light' : 'dark');
             applyTheme();
-            playClickSound();
+            if (typeof playClickSound === 'function') playClickSound();
         });
     }
 
