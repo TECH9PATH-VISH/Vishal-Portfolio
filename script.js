@@ -2,12 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 0. Initialize Lenis Smooth Scroll
     const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
+        lerp: 0.1, // Snappier scroll (higher = faster)
         smoothWheel: true,
-        wheelMultiplier: 1,
+        wheelMultiplier: 1.2, // Increases scroll distance per wheel click
         touchMultiplier: 2,
         infinite: false
     });
