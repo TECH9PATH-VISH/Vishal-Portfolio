@@ -107,6 +107,7 @@
 
     <!-- Hero Section -->
     <section class="hero" id="hero">
+        <canvas id="cyber-canvas"></canvas>
         <div class="hero-grid">
             <div class="hero-content">
                 <div class="hero-subtitle-pre">Dual Student: B.Tech @ BCE Patna & B.S. @ IIT Patna</div>
@@ -415,9 +416,15 @@
     <!-- Projects Section -->
     <section class="hidden" id="projects">
         <h2 class="section-title">Selected Projects</h2>
-        <div class="projects-grid">
+        <div class="project-filters" id="project-filters">
+            <button class="filter-btn active" data-filter="all">ALL</button>
+            <button class="filter-btn" data-filter="web">WEB & FULLSTACK</button>
+            <button class="filter-btn" data-filter="ai">AI / ML</button>
+            <button class="filter-btn" data-filter="systems">SYSTEMS / C</button>
+        </div>
+        <div class="projects-grid" id="projects-grid">
             <!-- Project 1: TruthChain -->
-            <article class="project-card">
+            <article class="project-card" data-category="web ai">
                 <div class="project-image-wrapper">
                     <img src="truthchain.png" alt="TruthChain Dashboard" class="project-image">
                 </div>
@@ -465,7 +472,7 @@
             </article>
 
             <!-- Project 2: PrepGate -->
-            <article class="project-card">
+            <article class="project-card" data-category="web">
                 <div class="project-image-wrapper">
                     <img src="prepgate.png" alt="PrepGate Dashboard" class="project-image">
                 </div>
@@ -516,7 +523,7 @@
             </article>
 
             <!-- Project 3: CLI Student Record System -->
-            <article class="project-card">
+            <article class="project-card" data-category="systems">
                 <div class="project-image-wrapper">
                     <!-- Placeholder image, replace src when available -->
                     <img src="" alt="CLI Student Record System Dashboard" class="project-image" style="background: rgba(255, 255, 255, 0.05);">
@@ -820,12 +827,13 @@
                 <button class="terminal-close-btn" id="terminal-close-top" aria-label="Close Shell">×</button>
             </div>
             <div class="secret-terminal-body">
-                <div class="terminal-output">
-                    <span class="system-tag">[System Access Granted]</span> Welcome. Initializing AI & Cyber Security
-                    Protocols...
+                <div class="terminal-output" id="terminal-output">
+                    <div><span class="system-tag">[System Access Granted]</span> Welcome. Initializing AI & Cyber Security Protocols...</div>
+                    <div style="color: var(--text-muted); margin-top: 5px;">Type <span class="highlight-text">help</span> to view available commands.</div>
                 </div>
                 <div class="terminal-input-line">
-                    <span>C:\ROOT&gt; </span><span class="terminal-cursor">_</span>
+                    <span class="prompt">C:\ROOT&gt; </span>
+                    <input type="text" id="terminal-input" class="terminal-input-field" autocomplete="off" spellcheck="false">
                 </div>
                 <div class="terminal-actions">
                     <a href="resume.pdf" download class="btn btn-primary" id="download-classified-btn">Download

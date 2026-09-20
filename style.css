@@ -564,6 +564,18 @@ section {
     align-items: center;
     padding-top: 220px;
     padding-bottom: 82px; /* Increased by 10% */
+    position: relative;
+}
+
+#cyber-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.6;
 }
 
 .hero-grid {
@@ -1436,6 +1448,43 @@ section {
 }
 
 /* Projects Gallery */
+.project-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background: rgba(0, 240, 255, 0.1);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+
+.project-card {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card.hide {
+    display: none;
+}
+
 .projects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -2570,6 +2619,8 @@ body.terminal-active .flashlight-grid {
     line-height: 1.6;
     color: var(--accent-green);
     border-right: 2px solid transparent;
+    max-height: 350px;
+    overflow-y: auto;
 }
 
 .system-tag {
@@ -2581,6 +2632,24 @@ body.terminal-active .flashlight-grid {
     margin-bottom: 35px;
     font-size: 1.1rem;
     color: var(--text-primary);
+    display: flex;
+    align-items: center;
+}
+
+.terminal-input-line .prompt {
+    margin-right: 8px;
+    white-space: nowrap;
+}
+
+.terminal-input-field {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--accent-cyan);
+    font-family: inherit;
+    font-size: 1.1rem;
+    flex-grow: 1;
+    caret-color: var(--accent-cyan);
 }
 
 .terminal-cursor {

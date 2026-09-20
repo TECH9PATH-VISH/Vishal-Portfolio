@@ -744,6 +744,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (terminalOverlay) {
                     terminalOverlay.classList.add('active');
                     document.body.classList.add('terminal-active');
+                    const tInput = document.getElementById('terminal-input');
+                    if (tInput) {
+                        setTimeout(() => tInput.focus(), 100);
+                    }
                 }
             }, 600);
         }
@@ -759,6 +763,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (closeTop) closeTop.addEventListener('click', closeTerminal);
     if (closeBottom) closeBottom.addEventListener('click', closeTerminal);
+
+    // 13. Interactive Terminal Logic
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalOutput = document.getElementById('terminal-output');
+
+    if (terminalInput && terminalOutput) {
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.trim().toLowerCase();
+                if (!command) return;
+                
+                // Echo the command
+                const echoLine = document.createElement('div');
+                echoLine.innerHTML = `<span style="color:var(--text-secondary)">C:\\ROOT&gt;</span> ${command}`;
+                terminalOutput.appendChild(echoLine);
+                
+                // Process command
+                const responseLine = document.createElement('div');
+                responseLine.style.color = "var(--accent-cyan)";
+                responseLine.style.marginBottom = "10px";
+                
+                switch (command) {
+                    case 'help':
+                        responseLine.innerHTML = `Available commands:<br>
+                        - <span class="highlight-text">whoami</span>: Display user identity<br>
+                        - <span class="highlight-text">skills</span>: List core competencies<br>
+                        - <span class="highlight-text">projects</span>: Display system portfolio<br>
+                        - <span class="highlight-text">clear</span>: Clear terminal window<br>
+                        - <span class="highlight-text">sudo</span>: Execute with root privileges`;
+                        break;
+                    case 'whoami':
+                        responseLine.innerHTML = `VISHAL KUMAR SINGH<br>IoT Engineer & Software Developer<br>Current Status: ACTIVE`;
+                        break;
+                    case 'skills':
+                        responseLine.innerHTML = `[CORE_MODULES_LOADED]:<br>C/C++, Python, React, Next.js, FastAPI, Node.js, Hardware/Sensors.`;
+                        break;
+                    case 'projects':
+                        responseLine.innerHTML = `[FETCHING_ARCHIVES]:<br>1. TruthChain (React, FastAPI)<br>2. PrepGate (Next.js, Node.js)<br>3. CLI Student Record (C, Systems)`;
+                        break;
+                    case 'clear':
+                        terminalOutput.innerHTML = `<div><span class="system-tag">[System Access Granted]</span> Welcome. Initializing AI & Cyber Security Protocols...</div><div style="color: var(--text-muted); margin-top: 5px;">Type <span class="highlight-text">help</span> to view available commands.</div>`;
+                        terminalInput.value = "";
+                        return; // return early to prevent appending responseLine
+                    case 'sudo':
+                        responseLine.innerHTML = `<span style="color:#ff4a4a">ACCESS DENIED: user is not in the sudoers file. This incident will be reported.</span>`;
+                        break;
+                    default:
+                        responseLine.innerHTML = `Command not found: ${command}. Type 'help' for available commands.`;
+                }
+                
+                terminalOutput.appendChild(responseLine);
+                terminalInput.value = "";
+                
+                // Auto-scroll to bottom
+                terminalOutput.scrollTop = terminalOutput.scrollHeight;
+            }
+        });
+        
+        // Focus input when clicking anywhere on terminal body
+        const terminalBody = document.querySelector('.secret-terminal-body');
+        if (terminalBody) {
+            terminalBody.addEventListener('click', () => {
+                terminalInput.focus();
+            });
+        }
+    }
 
     // 14. Levitating Data Core & Reactive Neural Nodes (Disabled to use pure CSS animations)
     /*
@@ -1237,5 +1307,110 @@ document.addEventListener('DOMContentLoaded', () => {
     // FEATURE 9 — GITHUB ACTIVITY GRAPH
     // (Replaced custom heatmap with SVG graph image in HTML)
     // ============================================================
+
+    // 15. Animated Project Filtering
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    if (filterBtns.length > 0 && projectCards.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                projectCards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.classList.remove('hide');
+                    } else {
+                        const categories = card.getAttribute('data-category');
+                        if (categories && categories.includes(filterValue)) {
+                            card.classList.remove('hide');
+                        } else {
+                            card.classList.add('hide');
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+    // 16. Web Worker Particle Background
+    const cyberCanvas = document.getElementById('cyber-canvas');
+    if (cyberCanvas && window.Worker) {
+        const ctx = cyberCanvas.getContext('2d', { alpha: true });
+        let worker = new Worker('worker.js');
+        
+        const resizeCanvas = () => {
+            cyberCanvas.width = cyberCanvas.offsetWidth;
+            cyberCanvas.height = cyberCanvas.offsetHeight;
+            worker.postMessage({ type: 'RESIZE', width: cyberCanvas.width, height: cyberCanvas.height });
+        };
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Initialize particles (density based on screen size)
+        const particleCount = Math.min(Math.floor((cyberCanvas.width * cyberCanvas.height) / 10000), 120);
+        worker.postMessage({ type: 'INIT', width: cyberCanvas.width, height: cyberCanvas.height, count: particleCount });
+        
+        // Handle mouse movement
+        cyberCanvas.parentElement.addEventListener('mousemove', (e) => {
+            const rect = cyberCanvas.getBoundingClientRect();
+            worker.postMessage({ 
+                type: 'MOUSE', 
+                mouseX: e.clientX - rect.left, 
+                mouseY: e.clientY - rect.top 
+            });
+        });
+        
+        cyberCanvas.parentElement.addEventListener('mouseleave', () => {
+            worker.postMessage({ type: 'MOUSE', mouseX: -1000, mouseY: -1000 });
+        });
+        
+        // Receive and render data
+        worker.onmessage = (e) => {
+            if (e.data.type === 'TICK_DATA') {
+                const data = new Float32Array(e.data.payload);
+                ctx.clearRect(0, 0, cyberCanvas.width, cyberCanvas.height);
+                
+                // Draw particles and lines
+                ctx.fillStyle = 'rgba(0, 240, 255, 0.8)';
+                ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
+                ctx.lineWidth = 1;
+                
+                // Draw nodes
+                for (let i = 0; i < data.length; i += 3) {
+                    ctx.beginPath();
+                    ctx.arc(data[i], data[i+1], data[i+2], 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Draw connections (simple brute force O(n^2) for web worker demo)
+                ctx.beginPath();
+                for (let i = 0; i < data.length; i += 3) {
+                    for (let j = i + 3; j < data.length; j += 3) {
+                        let dx = data[i] - data[j];
+                        let dy = data[i+1] - data[j+1];
+                        let dist = dx*dx + dy*dy;
+                        if (dist < 15000) { // roughly 120px threshold
+                            ctx.moveTo(data[i], data[i+1]);
+                            ctx.lineTo(data[j], data[j+1]);
+                        }
+                    }
+                }
+                ctx.stroke();
+                
+                // Request next tick
+                requestAnimationFrame(() => worker.postMessage({ type: 'TICK' }));
+            }
+        };
+        
+        // Start loop
+        worker.postMessage({ type: 'TICK' });
+    }
 
 });
